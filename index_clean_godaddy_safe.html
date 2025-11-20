@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PRODUCT SPECIFICATION REQUIREMENT CALCULATOR</title>
+
+<style>
+/* FORCE ALL BACKGROUNDS */
+html, body {
+    background: #D92C28 !important;
+    margin: 0;
+    padding: 0;
+}
+
+/* SAFE FALLBACK FONTS */
+body, select, label, button {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    color: white;
+}
+
+/* HEADER */
+.header {
+    background: #000000 !important;
+    color: #FFFFFF !important;
+    font-family: Cambria, serif !important;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    padding: 20px;
+}
+
+/* CONTAINER */
+.container {
+    width: 900px;
+    margin: 20px auto;
+}
+
+/* LABELS */
+label {
+    display: block;
+    margin-top: 18px;
+    font-size: 16px;
+    color: #FFFFFF !important;
+}
+
+/* SELECT DROPDOWNS */
+select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    border: 3px solid #000000 !important;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* BUTTON */
+button {
+    margin-top: 25px;
+    padding: 14px 24px;
+    background: #000000 !important;
+    color: #FFFFFF !important;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* RESULT BOX */
+#result {
+    width: 100%;
+    margin-top: 30px;
+    padding: 25px;
+    background: #FFFFFF !important;
+    border: 4px solid #000000 !important;
+    font-family: Cambria, serif !important;
+    font-size: 28px;
+    color: #D92C28 !important;
+    font-weight: 900;
+    display: none;
+    text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">PRODUCT SPECIFICATION REQUIREMENT CALCULATOR</div>
+
+<div class="container">
+
+<label>What size booth do you want?</label>
+<select id="Size">
+  <option value="">Select…</option>
+  <option value="1600 - (1,600 x 600 x 900mm)">1600 - (1,600 x 600 x 900mm)</option>
+  <option value="1200 - (1,200 x 600 x 900mm)">1200 - (1,200 x 600 x 900mm)</option>
+  <option value="600 - (600 x 400 x 900mm)">600 - (600 x 400 x 900mm)</option>
+</select>
+
+<label>What work surface is required?</label>
+<select id="Work Surface">
+  <option value="">Select…</option>
+  <option value="Elevate (Height Adjustable)">Elevate (Height Adjustable)</option>
+  <option value="Precision (Seated)">Precision (Seated)</option>
+  <option value="Adapt (Counter Top)">Adapt (Counter Top)</option>
+</select>
+
+<label>Do you require fully customisable, specific lux levels?</label>
+<select id="Fully Customisable Lux">
+  <option value="">Select…</option>
+  <option value="Yes">Yes</option>
+  <option value="No">No</option>
+</select>
+
+<label>What is the minimum highest lux level required?</label>
+<select id="Maximum Lux">
+  <option value="">Select…</option>
+  <option value="10000">10 000.00</option>
+  <option value="6000">6 000.00</option>
+  <option value="3500">3 500.00</option>
+  <option value="2500">2 500.00</option>
+  <option value="More than 10,000">More than 10,000</option>
+</select>
+
+<label>What is the minimum number of preset "scenes" you require?</label>
+<select id="Number of Scenes">
+  <option value="">Select…</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+  <option value="5">5</option>
+  <option value="6">6</option>
+  <option value="More than 6">More than 6</option>
+</select>
+
+<label>Do you require an integrated timer in the booth?</label>
+<select id="Integrated Timer">
+  <option value="">Select…</option>
+  <option value="Yes">Yes</option>
+  <option value="No">No</option>
+</select>
+
+<label>Do you require centralised control of your MVIB system?</label>
+<select id="Centralised Control">
+  <option value="">Select…</option>
+  <option value="Yes">Yes</option>
+  <option value="No">No</option>
+</select>
+
+<label>Do you wish to be 21 CFR Section 11 / EU Annex 11 Compliant?</label>
+<select id="Section21">
+  <option value="">Select…</option>
+  <option value="Yes">Yes</option>
+  <option value="No">No</option>
+</select>
+
+<label>Do you require the system to do data logging?</label>
+<select id="Datalogging">
+  <option value="">Select…</option>
+  <option value="Yes">Yes</option>
+  <option value="No">No</option>
+</select>
+
+<button onclick="calc()">Submit</button>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+const data = []; // placeholder to avoid JS errors; real logic added manually later.
+
+function calc() {
+    document.getElementById("result").style.display = "block";
+    document.getElementById("result").innerText = "Your MVIB product will appear here.";
+}
+</script>
+
+</body>
+</html>
