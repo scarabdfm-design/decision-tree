@@ -1,0 +1,293 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Scarab MVIB Decision Tree</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #e8fff5;
+        margin: 0;
+        padding: 0;
+        color: #003b2e;
+    }
+    header {
+        background: #006f54;
+        padding: 20px;
+        text-align: center;
+        color: white;
+    }
+    header img {
+        height: 60px;
+        margin-bottom: 10px;
+    }
+    .container {
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+    }
+    .card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        margin-bottom: 25px;
+    }
+    .question {
+        margin-bottom: 20px;
+    }
+    label {
+        font-weight: bold;
+        margin-bottom: 6px;
+        display: block;
+    }
+    select {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #00a67d;
+        background: #f3fffa;
+        font-size: 16px;
+    }
+    button {
+        background: #00a67d;
+        color: white;
+        padding: 16px;
+        border: none;
+        border-radius: 10px;
+        font-size: 18px;
+        cursor: pointer;
+        width: 100%;
+    }
+    button:hover {
+        background: #008c69;
+    }
+    #result {
+        margin-top: 25px;
+        font-size: 22px;
+        font-weight: bold;
+        text-align: center;
+        color: #004c3b;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+        body { padding: 10px; }
+        .card { padding: 15px; }
+        select, button { font-size: 16px; }
+    }
+</style>
+
+<script>
+// PRODUCT LOOKUP
+const productMapping = {
+    "[\"1600 - (1,600 x 600 x 900mm)\",\"Elevate\",\"No\",\"10000\",\"No\",\"No\",\"1\"]":"Scarab™ Buzzard 1600 Elevate",
+    "[\"1600 - (1,600 x 600 x 900mm)\",\"Elevate\",\"No\",\"10000\",\"No\",\"No\",\"5\"]":"Scarab™ Falcon 1600 Elevate"
+};
+
+// TALON CORE LOGIC
+const talonMapping = {
+    "Own Closed Network|Yes|Yes": "using Aveva with HMI",
+    "Own Closed Network|Yes|No": "using Aveva without HMI",
+    "Own Closed Network|No|Yes": "using Ignition with HMI",
+    "Own Closed Network|No|No": "using Ignition without HMI",
+    "Own Network Web Based|Yes|Yes": "using Web Aveva with HMI",
+    "Own Network Web Based|Yes|No": "using Web Aveva without HMI",
+    "Own Network Web Based|No|Yes": "using Web Ignition with HMI",
+    "Own Network Web Based|No|No": "using Web Ignition without HMI",
+    "No Existing Network|Yes|Yes": "using Independent Ignition with HMI",
+    "No Existing Network|Yes|No": "using Independent Ignition without HMI",
+    "No Existing Network|No|Yes": "using Independent Ignition with HMI",
+    "No Existing Network|No|No": "using Independent Ignition without HMI"
+};
+
+// SHOW/HIDE TALON QUESTIONS
+function hideTalon() {
+    document.getElementById("talonSection").style.display = "none";
+}
+function showTalon() {
+    document.getElementById("talonSection").style.display = "block";
+}
+
+// AUTO TOGGLE TALON SECTION
+function toggleTalon() {
+    const q1 = q1El.value;
+    const q2 = q2El.value;
+    const q3 = q3El.value;
+    const q4 = q4El.value;
+    const q5 = q5El.value;
+    const q6 = q6El.value;
+    const q7 = q7El.value;
+    const key = JSON.stringify([q1, q2, q3, q4, q5, q7, q6]);
+
+    let prod = productMapping[key];
+
+    if (prod && (prod.includes("Eagle") || prod.includes("Falcon"))) {
+        showTalon();
+    } else {
+        hideTalon();
+    }
+}
+
+// DECISION ENGINE
+function decide() {
+    const q1 = q1El.value;
+    const q2 = q2El.value;
+    const q3 = q3El.value;
+    const q4 = q4El.value;
+    const q5 = q5El.value;
+    const q6 = q6El.value;
+    const q7 = q7El.value;
+    const key = JSON.stringify([q1, q2, q3, q4, q5, q7, q6]);
+
+    let result = productMapping[key];
+
+    if (!result) {
+        resultBox.innerText = "No matching product found.";
+        return;
+    }
+
+    if (result.includes("Eagle") || result.includes("Falcon")) {
+        const q8 = q8El.value;
+        const q9 = q9El.value;
+
+        if (q8 === "No" && q9 === "No") {
+            result += " without Talon Core";
+        } else {
+            const tKey = `${q10El.value}|${q11El.value}|${q12El.value}`;
+            const addon = talonMapping[tKey] || "";
+            result += " with Talon Core " + addon;
+        }
+    }
+
+    resultBox.innerText = result;
+}
+
+</script>
+
+</head>
+<body onload="hideTalon()">
+
+<header>
+    <h1>Scarab™ MVIB Selector</h1>
+</header>
+
+<div class="container">
+<div class="card">
+
+<div class="question">
+<label>Booth Size</label>
+<select id="q1" onchange="toggleTalon()">
+    <option>1600 - (1,600 x 600 x 900mm)</option>
+    <option>1200 - (1,200 x 600 x 900mm)</option>
+    <option>600 - (600 x 400 x 900mm)</option>
+</select>
+</div>
+
+<div class="question">
+<label>Work Surface</label>
+<select id="q2" onchange="toggleTalon()">
+    <option>Elevate</option>
+    <option>Precision</option>
+    <option>Adapt</option>
+</select>
+</div>
+
+<div class="question">
+<label>Customisable Lux?</label>
+<select id="q3" onchange="toggleTalon()"><option>Yes</option><option>No</option></select>
+</div>
+
+<div class="question">
+<label>Lux Requirement</label>
+<select id="q4" onchange="toggleTalon()">
+    <option>10000</option><option>6000</option>
+    <option>3500</option><option>2500</option>
+    <option>More than 10,000</option>
+</select>
+</div>
+
+<div class="question">
+<label>Integrated Timer?</label>
+<select id="q5" onchange="toggleTalon()"><option>Yes</option><option>No</option></select>
+</div>
+
+<div class="question">
+<label>Preset Scenes</label>
+<select id="q6" onchange="toggleTalon()">
+<option>1</option><option>2</option><option>3</option>
+<option>4</option><option>5</option><option>6</option>
+</select>
+</div>
+
+<div class="question">
+<label>Centralised Control?</label>
+<select id="q7" onchange="toggleTalon()"><option>Yes</option><option>No</option></select>
+</div>
+
+<!-- TALON SECTION -->
+<div id="talonSection" class="card">
+
+<h2>Talon Core Requirements</h2>
+
+<div class="question">
+<label>21 CFR / Annex 11 Compliance?</label>
+<select id="q8"><option>Yes</option><option>No</option></select>
+</div>
+
+<div class="question">
+<label>Data Logging Required?</label>
+<select id="q9"><option>Yes</option><option>No</option></select>
+</div>
+
+<div class="question">
+<label>Network Structure</label>
+<select id="q10">
+    <option>Own Closed Network</option>
+    <option>Own Network Web Based</option>
+    <option>No Existing Network</option>
+</select>
+</div>
+
+<div class="question">
+<label>Existing Historian?</label>
+<select id="q11"><option>Yes</option><option>No</option></select>
+</div>
+
+<div class="question">
+<label>Dedicated Workstation?</label>
+<select id="q12"><option>Yes</option><option>No</option></select>
+</div>
+
+</div>
+
+<button onclick="decide()">Get Recommended Booth</button>
+
+<div id="result"></div>
+
+</div>
+</div>
+
+<script>
+const q1El = document.getElementById("q1");
+const q2El = document.getElementById("q2");
+const q3El = document.getElementById("q3");
+const q4El = document.getElementById("q4");
+const q5El = document.getElementById("q5");
+const q6El = document.getElementById("q6");
+const q7El = document.getElementById("q7");
+
+const q8El = document.getElementById("q8");
+const q9El = document.getElementById("q9");
+const q10El = document.getElementById("q10");
+const q11El = document.getElementById("q11");
+const q12El = document.getElementById("q12");
+
+const resultBox = document.getElementById("result");
+</script>
+
+</body>
+</html>
